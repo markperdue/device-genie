@@ -1,0 +1,4 @@
+.project
+
+# Ignore contents of image upload directory
+images/uploads/devices/*.*

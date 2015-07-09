@@ -10,7 +10,7 @@ function resultBlock($results,$error_count) {
 	//Success block
 	if (count($results) > 0) {
 		if ($error_count > 0) {
-			echo "<div id='alerts-error'><ul><li>There were <strong>".$error_count."</strong> errors.</li><li>Check database permissions and try again.</li><br>";
+			echo "<div id='alerts-error'><ul><li>There were <strong>".$error_count."</strong> errors.</li><li>Check database settings and try again.</li><br>";
 		} else {
 			echo "<div id='alerts-success'><ul>";
 		}
@@ -33,13 +33,13 @@ if(isset($_GET["install"]))
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`name` varchar(150) NOT NULL,
 	PRIMARY KEY (`id`)
-	) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	";
 
 	$permissions_entry = "
-	INSERT INTO `".$db_table_prefix."permissions` (`id`, `name`) VALUES
-	(1, 'New Member'),
-	(2, 'Administrator');
+	INSERT INTO `".$db_table_prefix."permissions` (`name`) VALUES
+	('New Member'),
+	('Administrator');
 	";
 
 	$users_sql = "
@@ -57,7 +57,7 @@ if(isset($_GET["install"]))
 	`sign_up_stamp` int(11) NOT NULL,
 	`last_sign_in_stamp` int(11) NOT NULL,
 	PRIMARY KEY (`id`)
-	) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	";
 
 	$user_permission_matches_sql = "
@@ -66,12 +66,12 @@ if(isset($_GET["install"]))
 	`user_id` int(11) NOT NULL,
 	`permission_id` int(11) NOT NULL,
 	PRIMARY KEY (`id`)
-	) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	";
 
 	$user_permission_matches_entry = "
-	INSERT INTO `".$db_table_prefix."user_permission_matches` (`id`, `user_id`, `permission_id`) VALUES
-	(1, 1, 2);
+	INSERT INTO `".$db_table_prefix."user_permission_matches` (`user_id`, `permission_id`) VALUES
+	(1, 2);
 	";
 
 	$configuration_sql = "
@@ -80,18 +80,18 @@ if(isset($_GET["install"]))
 	`name` varchar(150) NOT NULL,
 	`value` varchar(150) NOT NULL,
 	PRIMARY KEY (`id`)
-	) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	";
 
 	$configuration_entry = "
-	INSERT INTO `".$db_table_prefix."configuration` (`id`, `name`, `value`) VALUES
-	(1, 'website_name', 'UserCake'),
-	(2, 'website_url', 'localhost/'),
-	(3, 'email', 'noreply@ILoveUserCake.com'),
-	(4, 'activation', 'false'),
-	(5, 'resend_activation_threshold', '0'),
-	(6, 'language', 'models/languages/en.php'),
-	(7, 'template', 'models/site-templates/default.css');
+	INSERT INTO `".$db_table_prefix."configuration` (`name`, `value`) VALUES
+	('website_name', 'DeviceGenie'),
+	('website_url', 'localhost/'),
+	('email', 'noreply@righteousbanana.com'),
+	('activation', 'false'),
+	('resend_activation_threshold', '0'),
+	('language', 'models/languages/en.php'),
+	('template', 'models/site-templates/default.css');
 	";
 
 	$pages_sql = "CREATE TABLE IF NOT EXISTS `".$db_table_prefix."pages` (
@@ -99,27 +99,38 @@ if(isset($_GET["install"]))
 	`page` varchar(150) NOT NULL,
 	`private` tinyint(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY (`id`)
-	) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
+	) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 	";
 
-	$pages_entry = "INSERT INTO `".$db_table_prefix."pages` (`id`, `page`, `private`) VALUES
-	(1, 'account.php', 1),
-	(2, 'activate-account.php', 0),
-	(3, 'admin_configuration.php', 1),
-	(4, 'admin_page.php', 1),
-	(5, 'admin_pages.php', 1),
-	(6, 'admin_permission.php', 1),
-	(7, 'admin_permissions.php', 1),
-	(8, 'admin_user.php', 1),
-	(9, 'admin_users.php', 1),
-	(10, 'forgot-password.php', 0),
-	(11, 'index.php', 0),
-	(12, 'left-nav.php', 0),
-	(13, 'login.php', 0),
-	(14, 'logout.php', 1),
-	(15, 'register.php', 0),
-	(16, 'resend-activation.php', 0),
-	(17, 'user_settings.php', 1);
+	$pages_entry = "INSERT INTO `".$db_table_prefix."pages` (`page`, `private`) VALUES
+	('account.php', 1),
+	('activate-account.php', 0),
+	('add_device.php', 1),
+	('admin_configuration.php', 1),
+	('admin_page.php', 1),
+	('admin_pages.php', 1),
+	('admin_permission.php', 1),
+	('admin_permissions.php', 1),
+	('admin_user.php', 1),
+	('admin_users.php', 1),
+	('checkin.php', 1),
+	('checkout.php', 1),
+	('device.php', 0),
+	('edit.php', 0),
+	('error.php', 0),
+	('footer.php', 0),
+	('forgot-password.php', 0),
+	('header.php', 0),
+	('index.php', 0),
+	('login.php', 0),
+	('logout.php', 1),
+	('navbar-search.php', 0),
+	('navbar.php', 0),
+	('register.php', 0),
+	('resend-activation.php', 0),
+	('search.php', 0),
+	('searchbar.php', 0),
+	('user_settings.php', 1);
 	";
 
 	$permission_page_matches_sql = "CREATE TABLE IF NOT EXISTS `".$db_table_prefix."permission_page_matches` (
@@ -127,23 +138,28 @@ if(isset($_GET["install"]))
 	`permission_id` int(11) NOT NULL,
 	`page_id` int(11) NOT NULL,
 	PRIMARY KEY (`id`)
-	) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=23 ;
+	) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 	";
 
-	$permission_page_matches_entry = "INSERT INTO `".$db_table_prefix."permission_page_matches` (`id`, `permission_id`, `page_id`) VALUES
-	(1, 1, 1),
-	(2, 1, 14),
-	(3, 1, 17),
-	(4, 2, 1),
-	(5, 2, 3),
-	(6, 2, 4),
-	(7, 2, 5),
-	(8, 2, 6),
-	(9, 2, 7),
-	(10, 2, 8),
-	(11, 2, 9),
-	(12, 2, 14),
-	(13, 2, 17);
+	$permission_page_matches_entry = "INSERT INTO `".$db_table_prefix."permission_page_matches` (`permission_id`, `page_id`) VALUES
+	(1, 1),
+	(1, 11),
+	(1, 12),
+	(1, 21),
+	(1, 28),
+	(2, 1),
+	(2, 3),
+	(2, 4),
+	(2, 5),
+	(2, 6),
+	(2, 7),
+	(2, 8),
+	(2, 9),
+	(2, 10),
+	(2, 11),
+	(2, 12),
+	(2, 21),
+	(2, 28);
 	";
 
 	$device_list_sql = "CREATE TABLE IF NOT EXISTS `device_list` (

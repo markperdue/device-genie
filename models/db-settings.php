@@ -5,7 +5,7 @@ http://usercake.com
 */
 
 //Device Manager Information
-$dc_base_url = "http://localhost:8181/device-manager";
+$dc_base_url = "http://localhost:8080/device-manager";
 
 //Database Information
 $db_host = "localhost"; //Host address (most likely localhost)

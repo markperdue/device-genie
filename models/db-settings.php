@@ -4,12 +4,12 @@ UserCake Version: 2.0.2
 http://usercake.com
 */
 
-// Device Checkout Information
+//Device Manager Information
 $dc_base_url = "http://localhost:8181/device-manager";
 
 //Database Information
 $db_host = "localhost"; //Host address (most likely localhost)
-$db_name = "device_library"; //Name of Database
+$db_name = "device_manager"; //Name of Database
 $db_user = "admin"; //Name of database user
 $db_pass = "admin"; //Password for database user
 $db_table_prefix = "uc_";

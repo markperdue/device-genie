@@ -504,6 +504,20 @@ ul.admin input {
 a.green-button:hover {
     background-color: #3d8b43;
 }
+.blue-button-install {
+	background-color: #207cca;
+	border-radius: 4px;
+	color: #fff;
+	display: inline-block;
+	font-size: 20px;
+	padding: 13px 0 13px 0;
+	text-align: center;
+	text-decoration: none;
+	width: 225px;
+}
+a.blue-button-install:hover {
+    background-color: #1d6eb4;
+}
 .green-button-small {
     border: 1px solid #5cb864;
     border-bottom-left-radius: 0;

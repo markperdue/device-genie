@@ -13,19 +13,19 @@ if (!empty($_POST))
 	$cfgId = array();
 	$newSettings = $_POST['settings'];
 	
-	//Validate new site name
-	if ($newSettings[1] != $websiteName) {
-		$newWebsiteName = $newSettings[1];
-		if (minMaxRange(1,150,$newWebsiteName))
-		{
-			$errors[] = lang("CONFIG_NAME_CHAR_LIMIT",array(1,150));
-		}
-		else if (count($errors) == 0) {
-			$cfgId[] = 1;
-			$cfgValue[1] = $newWebsiteName;
-			$websiteName = $newWebsiteName;
-		}
-	}
+// 	//Validate new site name
+// 	if ($newSettings[1] != $websiteName) {
+// 		$newWebsiteName = $newSettings[1];
+// 		if (minMaxRange(1,150,$newWebsiteName))
+// 		{
+// 			$errors[] = lang("CONFIG_NAME_CHAR_LIMIT",array(1,150));
+// 		}
+// 		else if (count($errors) == 0) {
+// 			$cfgId[] = 1;
+// 			$cfgValue[1] = $newWebsiteName;
+// 			$websiteName = $newWebsiteName;
+// 		}
+// 	}
 	
 	//Validate new URL
 	if ($newSettings[2] != $websiteUrl) {
@@ -90,39 +90,39 @@ if (!empty($_POST))
 		}
 	}
 	
-	//Validate new language selection
-	if ($newSettings[6] != $language) {
-		$newLanguage = $newSettings[6];
-		if (minMaxRange(1,150,$language))
-		{
-			$errors[] = lang("CONFIG_LANGUAGE_CHAR_LIMIT",array(1,150));
-		}
-		elseif (!file_exists($newLanguage)) {
-			$errors[] = lang("CONFIG_LANGUAGE_INVALID",array($newLanguage));				
-		}
-		else if (count($errors) == 0) {
-			$cfgId[] = 6;
-			$cfgValue[6] = $newLanguage;
-			$language = $newLanguage;
-		}
-	}
+// 	//Validate new language selection
+// 	if ($newSettings[6] != $language) {
+// 		$newLanguage = $newSettings[6];
+// 		if (minMaxRange(1,150,$language))
+// 		{
+// 			$errors[] = lang("CONFIG_LANGUAGE_CHAR_LIMIT",array(1,150));
+// 		}
+// 		elseif (!file_exists($newLanguage)) {
+// 			$errors[] = lang("CONFIG_LANGUAGE_INVALID",array($newLanguage));				
+// 		}
+// 		else if (count($errors) == 0) {
+// 			$cfgId[] = 6;
+// 			$cfgValue[6] = $newLanguage;
+// 			$language = $newLanguage;
+// 		}
+// 	}
 	
-	//Validate new template selection
-	if ($newSettings[7] != $template) {
-		$newTemplate = $newSettings[7];
-		if (minMaxRange(1,150,$template))
-		{
-			$errors[] = lang("CONFIG_TEMPLATE_CHAR_LIMIT",array(1,150));
-		}
-		elseif (!file_exists($newTemplate)) {
-			$errors[] = lang("CONFIG_TEMPLATE_INVALID",array($newTemplate));				
-		}
-		else if (count($errors) == 0) {
-			$cfgId[] = 7;
-			$cfgValue[7] = $newTemplate;
-			$template = $newTemplate;
-		}
-	}
+// 	//Validate new template selection
+// 	if ($newSettings[7] != $template) {
+// 		$newTemplate = $newSettings[7];
+// 		if (minMaxRange(1,150,$template))
+// 		{
+// 			$errors[] = lang("CONFIG_TEMPLATE_CHAR_LIMIT",array(1,150));
+// 		}
+// 		elseif (!file_exists($newTemplate)) {
+// 			$errors[] = lang("CONFIG_TEMPLATE_INVALID",array($newTemplate));				
+// 		}
+// 		else if (count($errors) == 0) {
+// 			$cfgId[] = 7;
+// 			$cfgValue[7] = $newTemplate;
+// 			$template = $newTemplate;
+// 		}
+// 	}
 	
 	//Update configuration table with new settings
 	if (count($errors) == 0 AND count($cfgId) > 0) {
@@ -167,8 +167,12 @@ $permissionData = fetchAllPermissions(); //Retrieve list of all permission level
 				<form name="adminConfiguration" action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
 				<ul class="admin">
 					<li>
-						<label>Email:</label>
+						<label>Reply Email:</label>
 						<input type="text" name="settings[<?= $settings['email']['id']; ?>]" value="<?= $emailAddress; ?>" />
+					</li>
+					<li>
+						<label>Website URL:</label>
+						<input type="text" name="settings[<?= $settings['website_url']['id']; ?>]" value="<?= $websiteUrl; ?>" />
 					</li>
 					<li>
 						<label>Activation Threshold:</label>

@@ -26,7 +26,7 @@ $devices = simplexml_load_string($devices);
 			<div class="padding-top-medium"></div>
 			<div style="text-align: center;">
 				<h1>Hello <?=$loggedInUser->displayname; ?>.</h1>
-				<h2>You are a <?=$loggedInUser->title; ?>. You currently have <?= count($devices); ?> <?=(count($devices) > 1 || count($devices) == 0)?'items':'item';?> checked out.</h2>
+				<h2>You currently have <?= count($devices); ?> <?=(count($devices) > 1 || count($devices) == 0)?'items':'item';?> checked out.</h2>
 				<br/>
 				
 				<?php if (count($devices) > 0): ?>

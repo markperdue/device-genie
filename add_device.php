@@ -5,11 +5,12 @@ if (!securePage($_SERVER['PHP_SELF'])){die();}
 // Image upload validator
 function image_upload_validator() {
 	global $errors;
+	global $upload_directory;
 	$allowed_filetypes = array("gif", "jpeg", "jpg", "png");
 	$path = $_FILES["file"]["name"];
 	$extension = pathinfo($path, PATHINFO_EXTENSION);
 	$max_filesize = 2000000; // 2MB limit
-	$upload_directory = "images/uploads/devices/";
+// 	$upload_directory = "images/uploads/devices/";
 	
 	if (!in_array($extension, $allowed_filetypes)) {
 		$errors[] = "Error: The file must be an image.";
@@ -31,7 +32,7 @@ function image_upload_validator() {
 		return;
 	}
 	if (!is_writable($upload_directory)) {
-		$errors[] = "Error: Cannot write to the upload directory. LALALA " . $upload_directory;
+		$errors[] = "Error: Cannot write to the upload directory " . $upload_directory;
 		return;
 	}
 	if ($_FILES["file"]["error"] > 0) {

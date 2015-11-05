@@ -11,7 +11,8 @@ function resultBlock($results,$error_count) {
 	if (count($results) > 0) {
 		if ($error_count > 0) {
 			echo "<div id='alerts-error'><ul><li>There were <strong>".$error_count."</strong> errors.</li><li>Check database settings and try again.</li><br>";
-		} else {
+		}
+		else {
 			echo "<div id='alerts-success'><ul>";
 		}
 		foreach ($results as $result) {
@@ -22,8 +23,7 @@ function resultBlock($results,$error_count) {
 	}
 }
 
-if(isset($_GET["install"]))
-{
+if (isset($_GET["install"])) {
 	$db_issue = false;
 	$results = array();
 	$error_count = 0;
@@ -32,12 +32,13 @@ if(isset($_GET["install"]))
 	CREATE TABLE IF NOT EXISTS `".$db_table_prefix."permissions` (
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`name` varchar(150) NOT NULL,
-	PRIMARY KEY (`id`)
+	PRIMARY KEY (`id`),
+	UNIQUE KEY (`name`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	";
 
 	$permissions_entry = "
-	INSERT INTO `".$db_table_prefix."permissions` (`name`) VALUES
+	INSERT IGNORE INTO `".$db_table_prefix."permissions` (`name`) VALUES
 	('New Member'),
 	('Administrator');
 	";
@@ -56,7 +57,8 @@ if(isset($_GET["install"]))
 	`title` varchar(150) NOT NULL,
 	`sign_up_stamp` int(11) NOT NULL,
 	`last_sign_in_stamp` int(11) NOT NULL,
-	PRIMARY KEY (`id`)
+	PRIMARY KEY (`id`),
+  	UNIQUE KEY (`user_name`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	";
 
@@ -65,12 +67,13 @@ if(isset($_GET["install"]))
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`user_id` int(11) NOT NULL,
 	`permission_id` int(11) NOT NULL,
-	PRIMARY KEY (`id`)
+	PRIMARY KEY (`id`),
+  	UNIQUE KEY (`user_id`, `permission_id`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	";
 
 	$user_permission_matches_entry = "
-	INSERT INTO `".$db_table_prefix."user_permission_matches` (`user_id`, `permission_id`) VALUES
+	INSERT IGNORE INTO `".$db_table_prefix."user_permission_matches` (`user_id`, `permission_id`) VALUES
 	(1, 2);
 	";
 
@@ -79,12 +82,13 @@ if(isset($_GET["install"]))
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`name` varchar(150) NOT NULL,
 	`value` varchar(150) NOT NULL,
-	PRIMARY KEY (`id`)
+	PRIMARY KEY (`id`),
+	UNIQUE KEY (`name`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	";
 
 	$configuration_entry = "
-	INSERT INTO `".$db_table_prefix."configuration` (`name`, `value`) VALUES
+	INSERT IGNORE INTO `".$db_table_prefix."configuration` (`name`, `value`) VALUES
 	('website_name', 'DeviceGenie'),
 	('website_url', 'localhost/'),
 	('email', 'noreply@righteousbanana.com'),
@@ -98,11 +102,12 @@ if(isset($_GET["install"]))
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`page` varchar(150) NOT NULL,
 	`private` tinyint(1) NOT NULL DEFAULT '0',
-	PRIMARY KEY (`id`)
+	PRIMARY KEY (`id`),
+	UNIQUE KEY (`page`)
 	) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 	";
 
-	$pages_entry = "INSERT INTO `".$db_table_prefix."pages` (`page`, `private`) VALUES
+	$pages_entry = "INSERT IGNORE INTO `".$db_table_prefix."pages` (`page`, `private`) VALUES
 	('account.php', 1),
 	('activate-account.php', 0),
 	('add_device.php', 1),
@@ -137,11 +142,12 @@ if(isset($_GET["install"]))
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`permission_id` int(11) NOT NULL,
 	`page_id` int(11) NOT NULL,
-	PRIMARY KEY (`id`)
+	PRIMARY KEY (`id`),
+  	UNIQUE KEY (`permission_id`, `page_id`)
 	) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 	";
 
-	$permission_page_matches_entry = "INSERT INTO `".$db_table_prefix."permission_page_matches` (`permission_id`, `page_id`) VALUES
+	$permission_page_matches_entry = "INSERT IGNORE INTO `".$db_table_prefix."permission_page_matches` (`permission_id`, `page_id`) VALUES
 	(1, 1),
 	(1, 11),
 	(1, 12),
@@ -189,8 +195,13 @@ if(isset($_GET["install"]))
 	`created_on` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`changed_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	PRIMARY KEY (`id`),
-	UNIQUE KEY `device_id` (`device_id`),
-	FULLTEXT KEY `device_id_2` (`device_id`,`type`,`manufacturer`,`model`,`model_version`,`os_type`,`os_version`,`location`,`carrier`)
+	UNIQUE KEY (`device_id`),
+	FULLTEXT KEY (`device_id`,`type`,`manufacturer`,`model`,`model_version`,`os_type`,`os_version`,`location`,`carrier`),
+	FULLTEXT KEY (`type`,`manufacturer`,`model`),
+	FULLTEXT KEY (`type`,`manufacturer`,`model`,`os_type`,`location`,`carrier`),
+	FULLTEXT KEY (`device_id`,`type`,`manufacturer`,`model`,`os_type`,`location`,`carrier`),
+	FULLTEXT KEY (`device_id`,`type`,`manufacturer`,`model`,`model_version`,`os_type`,`location`,`carrier`),
+	FULLTEXT KEY (`device_id`,`type`,`manufacturer`,`model`,`model_version`,`os_type`,`os_version`,`location`,`carrier`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	";
 
@@ -202,172 +213,148 @@ if(isset($_GET["install"]))
 	`note` varchar(255) DEFAULT NULL,
 	`created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (`id`),
-	KEY `device_list_activity_ibfk_1` (`device_id`),
-	KEY `device_list_activity_ibfk_2` (`user`)
+	KEY (`device_id`),
+	KEY (`user`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	";
 
 	$stmt = $mysqli->prepare($configuration_sql);
-	if($stmt->execute())
-	{
+	if ($stmt->execute()) {
 		$results[] = "Added ".$db_table_prefix."configuration table";
 	}
-	else
-	{
+	else {
 		$results[] = "<strong>Unable to add ".$db_table_prefix."configuration table</strong>";
 		$error_count++;
 		$db_issue = true;
 	}
 
 	$stmt = $mysqli->prepare($configuration_entry);
-	if($stmt->execute())
-	{
+	if ($stmt->execute()) {
 		$results[] = "Configured ".$db_table_prefix."configuration table";
 	}
-	else
-	{
+	else {
 		$results[] = "<strong>Error configuring ".$db_table_prefix."configuration table</strong>";
 		$error_count++;
 		$db_issue = true;
 	}
 
 	$stmt = $mysqli->prepare($permissions_sql);
-	if($stmt->execute())
-	{
+	if ($stmt->execute()) {
 		$results[] = "Added ".$db_table_prefix."permissions table";
 	}
-	else
-	{
+	else {
 		$results[] = "<strong>Error adding ".$db_table_prefix."permissions table</strong>";
 		$error_count++;
 		$db_issue = true;
 	}
 
 	$stmt = $mysqli->prepare($permissions_entry);
-	if($stmt->execute())
-	{
+	if ($stmt->execute()) {
 		$results[] = "Configured ".$db_table_prefix."permissions table";
 	}
-	else
-	{
+	else {
 		$results[] = "<strong>Error configurating ".$db_table_prefix."permissions table</strong>";
 		$error_count++;
 		$db_issue = true;
 	}
 
 	$stmt = $mysqli->prepare($user_permission_matches_sql);
-	if($stmt->execute())
-	{
+	if ($stmt->execute()) {
 		$results[] = "Added ".$db_table_prefix."user_permission_matches table";
 	}
-	else
-	{
+	else {
 		$results[] = "<strong>Error adding ".$db_table_prefix."user_permission_matches table</strong>";
 		$error_count++;
 		$db_issue = true;
 	}
 
 	$stmt = $mysqli->prepare($user_permission_matches_entry);
-	if($stmt->execute())
-	{
+	if ($stmt->execute()) {
 		$results[] = "Created admin permission";
 	}
-	else
-	{
+	else {
 		$results[] = "<strong>Error creating admin permission</strong>";
 		$error_count++;
 		$db_issue = true;
 	}
 
 	$stmt = $mysqli->prepare($pages_sql);
-	if($stmt->execute())
-	{
+	if ($stmt->execute()) {
 		$results[] = "Added ".$db_table_prefix."pages table";
 	}
-	else
-	{
+	else {
 		$results[] = "<strong>Error adding ".$db_table_prefix."pages table</strong>";
 		$error_count++;
 		$db_issue = true;
 	}
 
 	$stmt = $mysqli->prepare($pages_entry);
-	if($stmt->execute())
-	{
+	if ($stmt->execute()) {
 		$results[] = "Created default page permissions";
 	}
-	else
-	{
+	else {
 		$results[] = "<strong>Error creating default page permissions</strong>";
 		$error_count++;
 		$db_issue = true;
 	}
 
 	$stmt = $mysqli->prepare($permission_page_matches_sql);
-	if($stmt->execute())
-	{
+	if ($stmt->execute()) {
 		$results[] = "Added ".$db_table_prefix."permission_page_matches table";
 	}
-	else
-	{
+	else {
 		$results[] = "<strong>Error adding ".$db_table_prefix."permission_page_matches table</strong>";
 		$error_count++;
 		$db_issue = true;
 	}
 
 	$stmt = $mysqli->prepare($permission_page_matches_entry);
-	if($stmt->execute())
-	{
+	if ($stmt->execute()) {
 		$results[] = "Added default access entries";
 	}
-	else
-	{
+	else {
 		$results[] = "<strong>Error adding default access entries</strong>";
 		$error_count++;
 		$db_issue = true;
 	}
 
 	$stmt = $mysqli->prepare($users_sql);
-	if($stmt->execute())
-	{
+	if ($stmt->execute()) {
 		$results[] = "Added ".$db_table_prefix."users table";
 	}
-	else
-	{
+	else {
 		$results[] = "<strong>Error adding ".$db_table_prefix."users table</strong>";
 		$error_count++;
 		$db_issue = true;
 	}
 
 	$stmt = $mysqli->prepare($device_list_sql);
-	if($stmt->execute())
-	{
+	if ($stmt->execute()) {
 		$results[] = "Added device_list table";
 	}
-	else
-	{
+	else {
 		$results[] = "<strong>Error adding device_list table</strong>";
 		$error_count++;
 		$db_issue = true;
 	}
 
 	$stmt = $mysqli->prepare($device_list_activity_sql);
-	if($stmt->execute())
-	{
+	if ($stmt->execute()) {
 		$results[] = "Added device_list_activity table";
 	}
-	else
-	{
+	else {
 		$results[] = "<strong>Error adding device_list_activity table</strong>";
 		$error_count++;
 		$db_issue = true;
 	}
 
 
-	if(!$db_issue)
-		$results[] = "<p><strong>Database setup completed successfully<br>Please delete the install folder before continuing</strong></p><a class='blue-button-install' href='../register.php' style='color: white;'>Create Admin Account</a><br><br>";
-	else
-	$results[] = "<p><a class='green-button' href='?install=true' style='color: white;'>Try Again</a></p>";
+	if (!$db_issue) {
+		$results[] = "<p><strong>Database setup completed successfully<br><br>Please delete the install folder before continuing</strong></p><a class='blue-button-install' href='../register.php' style='color: white;'>Create Admin Account</a><br><br>";
+	}
+	else {
+		$results[] = "<p><a class='green-button' href='?install=true' style='color: white;'>Try Again</a></p>";
+	}
 }
 ?>
 

@@ -1,4 +1,6 @@
 .project
+.DS_Store
+.gitignore
 
 # Ignore contents of image upload directory
 images/uploads/devices/*.*

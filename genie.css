@@ -634,7 +634,7 @@ ul.search-dropdown {
 	outline: none;
 	text-shadow: 1px 1px 1px #fff;
 	float: left;
-	margin: 3px 0px;
+	margin: 0px;
 	list-style: none;
 	width: 360px;
 	-moz-border-radius: 0px 0px 10px 10px;

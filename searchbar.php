@@ -17,16 +17,16 @@
 <script type="text/javascript">
 	$(function() {
 		$("#input_img").bind('focus click', function() {
-			$(".search-dropdown").show();
+			$(".search-dropdown").toggle();
 			$("#input_img").css('opacity', '0.5');
 		});
 		
-		$("#searchbar-form").bind('mouseleave', function() {
-			$(".search-dropdown").hide();
-			$("#input_img").css('opacity', '1.0');
-		});
+// 		$("#searchbar-form").bind('mouseleave', function() {
+// 			$(".search-dropdown").hide();
+// 			$("#input_img").css('opacity', '1.0');
+// 		});
 
-		var isFiltered = "<?= ($available === 'true' || $dev === 'true')?'true':'false'; ?>"
+		var isFiltered = "<?= ($available === 'true' || $dev === 'true') ? 'true' : 'false'; ?>"
 		if (isFiltered == "true") {
 			$("#filtered_search").show();
 		}

@@ -53,6 +53,10 @@ function image_upload_validator() {
     <?php include 'navbar-search.php'; ?>
     
     <?php
+    if (!is_writable($upload_directory)) {
+    	$errors[] = "Cannot write to the upload directory. Will not be able to upload device images";
+    }
+    
 	if (isset($_POST['submit'])) {
 		
 		// Determine if there was a file chosen

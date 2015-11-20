@@ -34,9 +34,9 @@ if (mysqli_connect_errno()) {
 }
 
 // Direct to install directory, if it exists
-if (is_dir("install/")) {
-	header("Location: install/");
-	die();
-}
+// if (is_dir("install/")) {
+// 	header("Location: install/");
+// 	die();
+// }
 
 ?>

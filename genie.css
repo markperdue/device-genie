@@ -625,7 +625,7 @@ ul.checkin-dropdown {
 	text-align: center;
 	z-index: 1;
 }
-ul.search-dropdown {
+.popup {
 	background-color: #fff;
 	border: 1px solid #fff;
 	-moz-box-shadow: 1px 1px 3px #555;
@@ -633,17 +633,15 @@ ul.search-dropdown {
 	-box-shadow: 1px 1px 3px #555;
 	outline: none;
 	text-shadow: 1px 1px 1px #fff;
-	float: left;
+	position: absolute;
 	margin: 0px;
-	list-style: none;
 	width: 360px;
 	-moz-border-radius: 0px 0px 10px 10px;
 	-webkit-border-bottom-right-radius: 10px;
 	-webkit-border-bottom-left-radius: 10px;
 	border-bottom-right-radius: 10px;
 	border-bottom-left-radius: 10px;
-	position: absolute;
-	z-index: 1;
+	display: none;
 }
 ul.search-dropdown li{
 	font-size: 16px;

@@ -125,7 +125,6 @@ if (isset($_GET["install"])) {
 	('error.php', 0),
 	('footer.php', 0),
 	('forgot-password.php', 0),
-	('header.php', 0),
 	('index.php', 0),
 	('login.php', 0),
 	('logout.php', 1),

@@ -156,7 +156,7 @@ if(!empty($_POST))
 		</div>
 	</div>
 	<?php include 'footer.php'; ?>
- 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+ 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
  	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.1.47/jquery.form-validator.min.js"></script>
 	<script> $.validate(); </script>
 </body>

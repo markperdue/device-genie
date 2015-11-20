@@ -13,7 +13,7 @@ require_once("models/config.php");
 		<?php endif; ?>
 		| <a href="logout.php">Logout</a>
 	<?php else: ?>
-		<a href="login.php">Login</a> | <a href="register.php">Regster</a>
+		<a href="login.php">Login</a> | <a href="register.php">Register</a>
 	<?php endif; ?>
 </div>
 <div class="clearFloats"></div>

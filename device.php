@@ -112,6 +112,9 @@ function IsNullOrEmptyString($str){
       return url.substring( hashPos + 1 );
     }
 
+    function toggle_visibility() {
+    	$("#checkin-dropdown").toggle();
+    }
     </script>
     </style>
 </head>
@@ -145,7 +148,7 @@ function IsNullOrEmptyString($str){
                         <span id="checkout-status">Available</span>
                     <?php else: ?>
                         <?php if (isUserLoggedIn() && $loggedInUser->username == $device->checked_out_to): ?>
-                            <a class="red-button-short" href="checkin.php?id=<?=$device->device_id;?>">Checkin</a><a class="red-button-dropdown" id="red-button-dropdown" onclick="toggle_visibility('checkin-dropdown');" href="javascript:void(0);">v</a>
+                            <a class="red-button-short" href="checkin.php?id=<?=$device->device_id;?>">Checkin</a><a class="red-button-dropdown" id="red-button-dropdown" onclick="toggle_visibility();" href="javascript:void(0);">v</a>
                             <span id="checkout-status">Device is checked out to you</span>
                             <ul class="checkin-dropdown" id="checkin-dropdown" style="display: none;">
                                 <li class="search-dropdown-header">Add a note to this checkin:</li>
@@ -208,18 +211,5 @@ function IsNullOrEmptyString($str){
         </div>
     </div>
     <?php include 'footer.php'; ?>
-    <script type="text/javascript">
-        function toggle_visibility(id) {
-            var e = document.getElementById(id);
-            if(e.style.display == 'block') {
-               e.style.display = 'none';
-               $("#red-button-dropdown").css('background-color', '');
-            }
-            else {
-               e.style.display = 'block';
-               $("#red-button-dropdown").css('background-color', '#b63a09');
-            }
-        }
-    </script>
 </body>
 </html>

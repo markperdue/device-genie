@@ -4,8 +4,13 @@ if (!securePage($_SERVER['PHP_SELF'])){die();}
 
 $api = '/rest/v1/devices?query=' . urlencode($query);
 $url = $dc_base_url . $api . "&checked_out_to=" . $loggedInUser->username;
-$devices = file_get_contents("$url", false);
-$devices = simplexml_load_string($devices);
+$devices = @file_get_contents("$url", false);
+if ($devices === FALSE) {
+	$devices = NULL;
+}
+else {
+	$devices = simplexml_load_string($devices);
+}
 ?>
 
 <!DOCTYPE html>
@@ -26,21 +31,24 @@ $devices = simplexml_load_string($devices);
 			<div class="padding-top-medium"></div>
 			<div style="text-align: center;">
 				<h1>Hello <?=$loggedInUser->displayname; ?>.</h1>
-				<h2>You currently have <?= count($devices); ?> <?=(count($devices) > 1 || count($devices) == 0)?'items':'item';?> checked out.</h2>
-				<br/>
-				
-				<?php if (count($devices) > 0): ?>
-					<?php foreach($devices as $device): ?>
-					<a href="device.php?id=<?= $device->device_id; ?>"><?= $device->device_id; ?></a>
-					<br/>
-					<?php endforeach; ?>
+				<?php if ($devices === NULL): ?>
+					There was a problem connecting to the database. Please try again later.
+					<br/><br/>
 				<?php else: ?>
-				To get started, type in the device you are looking for in the search bar above.
+					<h2>You currently have <?= count($devices); ?> <?=(count($devices) > 1 || count($devices) == 0)?'items':'item';?> checked out.</h2>
+					<br/>
+					<?php if (count($devices) > 0): ?>
+						<?php foreach($devices as $device): ?>
+						<a href="device.php?id=<?= $device->device_id; ?>"><?= $device->device_id; ?></a>
+						<br/>
+						<?php endforeach; ?>
+					<?php else: ?>
+						To get started, type in the device you are looking for in the search bar above.
+					<?php endif; ?>
+					<br/><br/>
+					Quick link to view the inventory for <a href="search.php?query=francisco">San Francisco</a>.
+					<br/><br/>
 				<?php endif; ?>
-				
-				<br/><br/>
-				Quick link to view the inventory for <a href="search.php?query=francisco">San Francisco</a>.
-				<br/><br/>
 			</div>
 		</div>
 	</div>

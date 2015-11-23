@@ -10,9 +10,6 @@
         <div class="section">
             <div class="section-label">Device not found!</div>
             <div class="section-body-device">
-                <div class="section-body-image-error">
-                    <img src="images/not-found.png"/>
-                </div>
                 <div class="section-body-text">
                     <span>That device was not found.</span>
                     <br />
